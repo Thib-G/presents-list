@@ -6,12 +6,24 @@ from .models import Present, Person
 class PersonSchema(ModelSchema):
     class Config:
         model = Person
-        model_fields = ['first_name', 'last_name', 'birthday']
+        model_fields = ['id', 'first_name', 'last_name', 'birthday']
+
 
 class PresentSchema(ModelSchema):
-    requested_by: PersonSchema
-    offered_by: List[PersonSchema] = []
-
     class Config:
         model = Present
-        model_fields = ['description']
+        model_fields = ['id', 'description', 'requested_by', 'offered_by']
+
+
+class PresentInSchema(ModelSchema):
+    offered_by_ids: List[int] = []
+    class Config:
+        model = Present
+        model_fields = ['description', 'requested_by']
+
+
+class PresentUpdateSchema(ModelSchema):
+    offered_by_ids: List[int] = []
+    class Config:
+        model = Present
+        model_fields = ['id', 'description', 'requested_by']
