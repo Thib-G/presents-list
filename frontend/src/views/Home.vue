@@ -1,18 +1,48 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <b-container>
+    <h1>Cadeaux de Noël 2021</h1>
+    <h2>Cadeaux</h2>
+    <p>
+      <b-form-checkbox v-model="isOfferedHiddenLocal">
+        Masquer les noms.
+      </b-form-checkbox>
+    </p>
+    <p>
+      <b-button variant="primary" to="/present/new">
+        <i class="fa fa-gift" aria-hidden="true"></i>
+        Nouveau cadeau
+      </b-button>
+    </p>
+    <PresentsTable />
+  </b-container>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import { mapActions, mapState } from 'vuex';
+
+import PresentsTable from '@/components/PresentsTable.vue';
 
 export default {
   name: 'Home',
+  created() {
+    this.getAllPresents();
+  },
+  computed: {
+    ...mapState('presents', ['isOfferedHidden']),
+    isOfferedHiddenLocal: {
+      get() {
+        return this.isOfferedHidden;
+      },
+      set(newVal) {
+        this.setOfferedHidden(newVal);
+      },
+    },
+  },
+  methods: {
+    ...mapActions('presents', ['getAllPresents', 'setOfferedHidden']),
+  },
   components: {
-    HelloWorld,
+    PresentsTable,
   },
 };
 </script>

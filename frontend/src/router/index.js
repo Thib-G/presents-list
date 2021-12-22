@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Home from '@/views/Home.vue';
+import PresentForm from '@/views/PresentForm.vue';
 
 Vue.use(VueRouter);
 
@@ -9,6 +10,14 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/present',
+    redirect: '/present/new',
+  },
+  {
+    path: '/present/:id',
+    component: PresentForm,
   },
   {
     path: '/about',
