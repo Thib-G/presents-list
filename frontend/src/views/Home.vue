@@ -25,6 +25,7 @@ import PresentsTable from '@/components/PresentsTable.vue';
 export default {
   name: 'Home',
   created() {
+    this.getAllPersons();
     this.getAllPresents();
   },
   computed: {
@@ -39,7 +40,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('presents', ['getAllPresents', 'setOfferedHidden']),
+    ...mapActions('presents', ['getAllPersons', 'getAllPresents', 'setOfferedHidden']),
   },
   components: {
     PresentsTable,

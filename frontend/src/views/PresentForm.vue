@@ -5,7 +5,7 @@
     <p v-else>Cadeau numéro {{ id }}:</p>
     <p>
       <b>
-        <span v-if="form.requested_by">{{ requested_by.first_name }}</span>
+        <span v-if="requested_by">{{ requested_by.first_name }}</span>
         <span v-else>?</span>
       </b>
       demande
@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -106,7 +106,10 @@ export default {
   },
   created() {
     if (!this.isNew) {
-      this.$store.dispatch('presents/getPresent', this.id);
+      this.getPresent(this.id);
+    }
+    if (this.persons.length === 0) {
+      this.getAllPersons();
     }
   },
   watch: {
@@ -148,6 +151,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('presents', ['getPresent', 'getAllPersons']),
     updatePresent() {
       if (this.isNew) {
         const payload = {

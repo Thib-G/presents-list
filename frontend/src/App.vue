@@ -2,14 +2,20 @@
   <div id="app">
     <b-container>
       <router-view />
+      <p v-if="isLoggedIn"><a href @click.prevent="logout">Logout</a></p>
     </b-container>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
-  created() {
-    this.$store.dispatch('presents/getAllPersons');
+  computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
+  },
+  methods: {
+    ...mapActions('auth', ['logout']),
   },
 };
 </script>

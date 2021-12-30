@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios from '@/_helpers/axios';
+import authHeader from '@/_helpers/authHeader';
 
 const url = '/myapp/api';
 
@@ -23,43 +24,6 @@ const getters = {
   isOfferedHidden: (state) => state.isOfferedHidden,
 };
 
-// actions
-const actions = {
-  getAllPresents({ commit }) {
-    return axios.get(`${url}/presents`).then((response) => {
-      commit('SET_PRESENTS', response.data);
-    });
-  },
-  getAllPersons({ commit }) {
-    return axios.get(`${url}/persons`).then((response) => {
-      commit('SET_PERSONS', response.data);
-    });
-  },
-  getPresent({ commit }, payload) {
-    return axios.get(`${url}/presents/${payload}`).then((response) => {
-      commit('SET_CURRENT_PRESENT', response.data);
-    });
-  },
-  createPresent({ dispatch }, payload) {
-    return axios.post(`${url}/presents`, payload).then((response) => {
-      dispatch('getPresent', response.data.id);
-    });
-  },
-  updatePresent({ dispatch }, payload) {
-    return axios.put(`${url}/presents/${payload.id}`, payload).then(() => {
-      dispatch('getPresent', payload.id);
-    });
-  },
-  deletePresent({ dispatch }, payload) {
-    return axios.delete(`${url}/presents/${payload}`).then(() => {
-      dispatch('getAllPresents');
-    });
-  },
-  setOfferedHidden({ commit }, payload) {
-    commit('TOGGLE_OFFERED_HIDDEN', payload);
-  },
-};
-
 // mutations
 const mutations = {
   SET_PRESENTS(state, presents) {
@@ -73,6 +37,61 @@ const mutations = {
   },
   TOGGLE_OFFERED_HIDDEN(state, val) {
     state.isOfferedHidden = val;
+  },
+};
+
+// actions
+const actions = {
+  async getAllPresents({ commit }) {
+    try {
+      const response = await axios.get(`${url}/presents`, { headers: authHeader() });
+      commit('SET_PRESENTS', response.data);
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  },
+  async getAllPersons({ commit }) {
+    try {
+      const response = await axios.get(`${url}/persons`, { headers: authHeader() });
+      commit('SET_PERSONS', response.data);
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  },
+  async getPresent({ commit }, payload) {
+    try {
+      const response = await axios.get(`${url}/presents/${payload}`, { headers: authHeader() });
+      commit('SET_CURRENT_PRESENT', response.data);
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  },
+  async createPresent({ dispatch }, payload) {
+    try {
+      const response = await axios.post(`${url}/presents`, payload, { headers: authHeader() });
+      dispatch('getPresent', response.data.id);
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  },
+  async updatePresent({ dispatch }, payload) {
+    try {
+      await axios.put(`${url}/presents/${payload.id}`, payload, { headers: authHeader() });
+      dispatch('getPresent', payload.id);
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  },
+  async deletePresent({ dispatch }, payload) {
+    try {
+      await axios.delete(`${url}/presents/${payload}`, { headers: authHeader() });
+      dispatch('getAllPresents');
+    } catch (error) {
+      console.log('ERROR', error);
+    }
+  },
+  setOfferedHidden({ commit }, payload) {
+    commit('TOGGLE_OFFERED_HIDDEN', payload);
   },
 };
 
